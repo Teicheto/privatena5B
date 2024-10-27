@@ -8,13 +8,27 @@
         /* Тъмен стил с основни елементи */
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #121212;
             color: #ffffff;
+        }
+        #resetButton {
+            margin-bottom: 10px;
+            padding: 8px 16px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #ff4d4d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #resetButton:hover {
+            background-color: #ff1a1a;
         }
         #gameArea {
             position: relative;
@@ -47,23 +61,6 @@
             width: 80px;
             height: 80px;
             cursor: pointer;
-        }
-        /* Стил за бутона "Рестартиране на рекорда" */
-        #resetButton {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            padding: 5px 10px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #ff4d4d;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #resetButton:hover {
-            background-color: #ff1a1a;
         }
         /* Стилове за конфетите */
         .confetti {
@@ -99,15 +96,16 @@
     </style>
 </head>
 <body>
+    <!-- Бутон за рестартиране на рекорда над играта -->
+    <button id="resetButton">Рестартиране на рекорда</button>
+
     <div id="gameArea">
         <div id="score">Хванати: 0</div>
         <div id="timer">Време: 0 сек.</div>
         <div id="highScore">Рекорд: 0</div>
-        <img id="target" src="BevroGame.jpeg" alt="target">
+        <img id="target" src="download.jpeg" alt="target">
         <!-- Надпис за нов рекорд -->
         <div id="newRecord">НОВ РЕКОРД!</div>
-        <!-- Бутон за рестартиране на рекорда -->
-        <button id="resetButton">Рестартиране на рекорда</button>
     </div>
 
     <script>
@@ -180,7 +178,7 @@
         });
 
         // Преместване на целта на всеки 0.5 секунди
-        setInterval(moveTarget, 570);
+        setInterval(moveTarget, 500);
 
         // Таймер за следене на времето
         setInterval(() => {
