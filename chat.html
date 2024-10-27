@@ -6,23 +6,58 @@
     <title>Чат - 5B</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #messages {
-            max-width: 600px;
-            height: 300px;
-            border: 1px solid #ddd;
-            overflow-y: scroll;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-        .message {
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #f1f1f1;
-        }
+    background-color: #1e1e1e; /* Тъмен фон */
+    color: #ffffff; /* Бял текст */
+    font-family: Arial, sans-serif; /* Шрифт */
+    margin: 0; /* Няма отстъп отстрани */
+    padding: 20px; /* Отстъп отгоре и отдолу */
+}
+
+.container {
+    max-width: 600px; /* Максимална ширина на чата */
+    margin: auto; /* Центриране */
+    background-color: #2a2a2a; /* По-светъл фон за контейнера */
+    border-radius: 10px; /* Закръглени ъгли */
+    padding: 20px; /* Вътрешен отстъп */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Сянка */
+}
+
+.messages {
+    max-height: 400px; /* Максимална височина на съобщенията */
+    overflow-y: auto; /* Скролиране по вертикала */
+    margin-bottom: 20px; /* Отстъп отдолу */
+}
+
+.message {
+    background-color: #3b3b3b; /* Фон на съобщението */
+    padding: 10px; /* Вътрешен отстъп */
+    border-radius: 5px; /* Закръглени ъгли */
+    margin-bottom: 10px; /* Отстъп между съобщенията */
+}
+
+input[type="text"], input[type="submit"] {
+    padding: 10px; /* Вътрешен отстъп */
+    border-radius: 5px; /* Закръглени ъгли */
+    border: 1px solid #444; /* Рамка */
+    margin-right: 10px; /* Отстъп между полетата */
+}
+
+input[type="text"] {
+    flex: 1; /* Запълва наличното пространство */
+    background-color: #3b3b3b; /* Фон на входното поле */
+    color: #ffffff; /* Бял текст */
+}
+
+input[type="submit"] {
+    background-color: green; /* Зелен фон на бутона */
+    color: white; /* Бял текст на бутона */
+    border: none; /* Премахва рамката */
+    cursor: pointer; /* Курсор на ръка */
+}
+
+input[type="submit"]:hover {
+    background-color: darkgreen; /* По-тъмен зелен при задържане */
+}
     </style>
 </head>
 <body>
