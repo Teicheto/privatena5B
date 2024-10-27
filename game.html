@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Бевро Игра</title>
     <style>
-        /* Стил за тъмен и модерен дизайн */
+        /* Тъмен стил с основни елементи */
         body {
             display: flex;
             justify-content: center;
@@ -25,43 +25,66 @@
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        #score, #timer {
+        #score, #timer, #highScore {
             position: absolute;
-            top: 10px;
             font-size: 18px;
             font-weight: bold;
         }
         #score {
+            top: 10px;
             left: 10px;
         }
         #timer {
+            top: 10px;
             right: 10px;
+        }
+        #highScore {
+            top: 40px;
+            left: 10px;
         }
         #target {
             position: absolute;
-            width: 80px; /* по-малко изображение за по-трудна игра */
+            width: 80px;
             height: 80px;
             cursor: pointer;
+        }
+        /* Стилове за фойерверките */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: yellow;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+        @keyframes explode {
+            from { transform: scale(1); opacity: 1; }
+            to { transform: scale(10); opacity: 0; }
         }
     </style>
 </head>
 <body>
-
     <div id="gameArea">
         <div id="score">Хванати: 0</div>
         <div id="timer">Време: 0 сек.</div>
-        <img id="target" src="BevroGame.jpeg" alt="target">
+        <div id="highScore">Рекорд: 0</div>
+        <img id="target" src="download.jpeg" alt="target">
     </div>
 
     <script>
         let score = 0;
         let timePlayed = 0;
+        let highScore = localStorage.getItem('highScore') || 0;
         const scoreDisplay = document.getElementById('score');
         const timerDisplay = document.getElementById('timer');
+        const highScoreDisplay = document.getElementById('highScore');
         const target = document.getElementById('target');
         const gameArea = document.getElementById('gameArea');
 
-        // Функция за случайно преместване на "Беврото"
+        // Показване на текущия рекорд
+        highScoreDisplay.textContent = `Рекорд: ${highScore}`;
+
+        // Функция за преместване на целта на случайно място
         function moveTarget() {
             const x = Math.random() * (gameArea.clientWidth - target.clientWidth);
             const y = Math.random() * (gameArea.clientHeight - target.clientHeight);
@@ -69,17 +92,39 @@
             target.style.top = `${y}px`;
         }
 
-        // Увеличаване на резултата и преместване на изображението при клик
+        // Функция за добавяне на фойерверки
+        function showFireworks() {
+            for (let i = 0; i < 20; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework');
+                firework.style.left = `${Math.random() * gameArea.clientWidth}px`;
+                firework.style.top = `${Math.random() * gameArea.clientHeight}px`;
+                gameArea.appendChild(firework);
+
+                // Премахване на фойерверките след края на анимацията
+                setTimeout(() => firework.remove(), 1000);
+            }
+        }
+
+        // При клик върху целта, увеличаваме точките
         target.addEventListener('click', () => {
             score++;
             scoreDisplay.textContent = `Хванати: ${score}`;
             moveTarget();
+
+            // Проверка за нов рекорд
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('highScore', highScore); // Запазване на рекорда
+                highScoreDisplay.textContent = `Рекорд: ${highScore}`;
+                showFireworks(); // Показване на фойерверки при нов рекорд
+            }
         });
 
-        // Преместване на изображението на всеки 0.5 секунди (за по-голяма скорост)
-        setInterval(moveTarget, 560);
+        // Преместване на целта на всеки 0.5 секунди
+        setInterval(moveTarget, 500);
 
-        // Таймер за следене на времето, като обновява всяка секунда
+        // Таймер за следене на времето
         setInterval(() => {
             timePlayed++;
             timerDisplay.textContent = `Време: ${timePlayed} сек.`;
