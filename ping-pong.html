@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Модерен Пинг-Понг</title>
+    <title>Пинг-Понг Бевро</title>
     <style>
         /* Тъмен стил за играта */
         body {
@@ -90,7 +90,7 @@
         const resetButton = document.getElementById('resetButton');
 
         let score = 0;
-        let highScore = localStorage.getItem('highScore') || 0;
+        let highScore = localStorage.getItem('pingPongHighScore') || 0;
         let timePlayed = 0;
         let ballX = 400, ballY = 200;
         let ballSpeedX = 3, ballSpeedY = 3;
@@ -126,7 +126,7 @@
                 // Проверка за нов рекорд
                 if (score > highScore) {
                     highScore = score;
-                    localStorage.setItem('highScore', highScore);
+                    localStorage.setItem('pingPongHighScore', highScore);
                     highScoreDisplay.textContent = `Рекорд: ${highScore}`;
                 }
             }
@@ -163,7 +163,7 @@
         // Бутон за рестартиране на рекорда
         resetButton.addEventListener('click', () => {
             highScore = 0;
-            localStorage.setItem('highScore', highScore);
+            localStorage.setItem('pingPongHighScore', highScore);
             highScoreDisplay.textContent = `Рекорд: ${highScore}`;
             alert("Рекордът е нулиран!");
         });
