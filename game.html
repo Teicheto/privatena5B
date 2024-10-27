@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра с ловене на изображението</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #gameArea {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background-color: #e0e0e0;
+            overflow: hidden;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+        }
+        #target {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div id="score">Хванати: 0</div>
+        <img id="target" src="BevroGame.jpeg" alt="target">
+    </div>
+
+    <script>
+        let score = 0;
+        const scoreDisplay = document.getElementById('score');
+        const target = document.getElementById('target');
+        const gameArea = document.getElementById('gameArea');
+
+        function moveTarget() {
+            const x = Math.random() * (gameArea.clientWidth - target.clientWidth);
+            const y = Math.random() * (gameArea.clientHeight - target.clientHeight);
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+        }
+
+        target.addEventListener('click', () => {
+            score++;
+            scoreDisplay.textContent = `Хванати: ${score}`;
+            moveTarget();
+        });
+
+        // Преместване на изображението на всяка секунда
+        setInterval(moveTarget, 1000);
+    </script>
+</body>
+</html>

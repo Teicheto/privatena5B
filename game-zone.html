@@ -132,6 +132,53 @@
 </div>
 
 
+<div class="content">
+    <p>Нашата първа игра на бевро!</p>
+    <!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Начална страница</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        #gameButton {
+            padding: 15px 30px;
+            font-size: 20px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #gameButton:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Бутонът, който отваря game.html -->
+    <button id="gameButton" onclick="openGame()">Бевро Игра</button>
+
+    <script>
+        function openGame() {
+            window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>
+</div>
+
+
     <footer>
         Създадено от Теодор Филипов, 5Б клас, гр. Велинград
     </footer>
