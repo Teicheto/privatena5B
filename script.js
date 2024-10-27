@@ -61,3 +61,34 @@ function displayComments() {
 
 // Показване на коментарите при зареждане на страницата
 displayComments();
+// Получаване на елементите от DOM
+const messageInput = document.getElementById('messageInput');
+const sendButton = document.getElementById('sendButton');
+const messagesDiv = document.getElementById('messages');
+
+// Добавяне на слушател на събития за бутона "Изпрати"
+sendButton.addEventListener('click', function() {
+    const message = messageInput.value.trim(); // Взима текста от входното поле и премахва излишните пробели
+
+    if (message) { // Проверка дали съобщението не е празно
+        // Създаване на ново съобщение
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message'; // Добавяне на клас за стилизиране
+        messageDiv.textContent = message; // Задаване на текста на съобщението
+
+        // Добавяне на съобщението в чата
+        messagesDiv.appendChild(messageDiv);
+
+        // Изчистване на входното поле
+        messageInput.value = '';
+        // Скролиране до най-новото съобщение
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+});
+
+// Добавяне на функция за изпращане с Enter
+messageInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') { // Проверка дали натиснатият клавиш е Enter
+        sendButton.click(); // Изпраща съобщението при натискане на Enter
+    }
+});
