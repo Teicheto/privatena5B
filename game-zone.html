@@ -135,30 +135,37 @@
 <div class="content">
     <p>Нашата първа игра на бевро!</p>
     <!DOCTYPE html>
-<html lang="bg">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Крадни Бевро игра</title>
-    <style>
-        #gameButton {
-            font-size: 20px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <!-- Бутонът, който отваря game.html -->
-    <button id="gameButton" onclick="openGame()">Бевро Игра</button>
-
-    <script>
-        function openGame() {
-            window.location.href = 'game.html';
-        }
-    </script>
-</body>
-</html>
+    <html lang="bg">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Крадни Бевро Игра</title>
+        <style>
+            /* Основни стилове за бутона */
+            .game-button {
+                display: inline-block;
+                margin: 20px;
+                padding: 12px 24px;
+                font-size: 18px;
+                color: #ffffff;
+                background-color: #ff6600;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background-color 0.3s;
+                font-family: Arial, sans-serif;
+            }
+            .game-button:hover {
+                background-color: #ff3300;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Бутон за пренасочване към "Крадни Бевро" -->
+        <a href="game.html" class="game-button">Крадни Бевро</a>
+    </body>
+    </html>     
 </div>
 
 <div class="content">
