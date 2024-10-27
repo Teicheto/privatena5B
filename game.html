@@ -48,6 +48,23 @@
             height: 80px;
             cursor: pointer;
         }
+        /* Стил за бутона "Рестартиране на рекорда" */
+        #resetButton {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #ff4d4d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #resetButton:hover {
+            background-color: #ff1a1a;
+        }
         /* Стилове за конфетите */
         .confetti {
             position: absolute;
@@ -89,6 +106,8 @@
         <img id="target" src="BevroGame.jpeg" alt="target">
         <!-- Надпис за нов рекорд -->
         <div id="newRecord">НОВ РЕКОРД!</div>
+        <!-- Бутон за рестартиране на рекорда -->
+        <button id="resetButton">Рестартиране на рекорда</button>
     </div>
 
     <script>
@@ -101,6 +120,7 @@
         const target = document.getElementById('target');
         const gameArea = document.getElementById('gameArea');
         const newRecordDisplay = document.getElementById('newRecord');
+        const resetButton = document.getElementById('resetButton');
 
         // Показване на текущия рекорд
         highScoreDisplay.textContent = `Рекорд: ${highScore}`;
@@ -149,6 +169,14 @@
                 showConfetti(); // Показване на конфети при нов рекорд
                 showNewRecord(); // Показване на надпис "НОВ РЕКОРД!"
             }
+        });
+
+        // Функция за рестартиране на рекорда
+        resetButton.addEventListener('click', () => {
+            highScore = 0;
+            localStorage.setItem('highScore', highScore);
+            highScoreDisplay.textContent = `Рекорд: ${highScore}`;
+            alert("Рекордът е нулиран!");
         });
 
         // Преместване на целта на всеки 0.5 секунди
