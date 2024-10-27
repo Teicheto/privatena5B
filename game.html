@@ -48,8 +48,8 @@
             height: 80px;
             cursor: pointer;
         }
-        /* Стилове за фойерверките */
-        .firework {
+        /* Стилове за конфетите */
+        .confetti {
             position: absolute;
             width: 5px;
             height: 5px;
@@ -61,6 +61,24 @@
             from { transform: scale(1); opacity: 1; }
             to { transform: scale(10); opacity: 0; }
         }
+        /* Стил за надписа "НОВ РЕКОРД" */
+        #newRecord {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            opacity: 0;
+            animation: showRecord 2s ease-in-out forwards;
+        }
+        @keyframes showRecord {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -69,6 +87,8 @@
         <div id="timer">Време: 0 сек.</div>
         <div id="highScore">Рекорд: 0</div>
         <img id="target" src="BevroGame.jpeg" alt="target">
+        <!-- Надпис за нов рекорд -->
+        <div id="newRecord">НОВ РЕКОРД!</div>
     </div>
 
     <script>
@@ -80,6 +100,7 @@
         const highScoreDisplay = document.getElementById('highScore');
         const target = document.getElementById('target');
         const gameArea = document.getElementById('gameArea');
+        const newRecordDisplay = document.getElementById('newRecord');
 
         // Показване на текущия рекорд
         highScoreDisplay.textContent = `Рекорд: ${highScore}`;
@@ -92,18 +113,26 @@
             target.style.top = `${y}px`;
         }
 
-        // Функция за добавяне на фойерверки
-        function showFireworks() {
+        // Функция за показване на конфети в различни цветове
+        function showConfetti() {
+            const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A6', '#FFD700'];
             for (let i = 0; i < 20; i++) {
-                const firework = document.createElement('div');
-                firework.classList.add('firework');
-                firework.style.left = `${Math.random() * gameArea.clientWidth}px`;
-                firework.style.top = `${Math.random() * gameArea.clientHeight}px`;
-                gameArea.appendChild(firework);
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${Math.random() * gameArea.clientWidth}px`;
+                confetti.style.top = `${Math.random() * gameArea.clientHeight}px`;
+                gameArea.appendChild(confetti);
 
-                // Премахване на фойерверките след края на анимацията
-                setTimeout(() => firework.remove(), 1000);
+                // Премахване на конфетите след края на анимацията
+                setTimeout(() => confetti.remove(), 1000);
             }
+        }
+
+        // Функция за показване на надпис "НОВ РЕКОРД!"
+        function showNewRecord() {
+            newRecordDisplay.style.opacity = 1;
+            newRecordDisplay.style.animation = 'showRecord 2s ease-in-out forwards';
         }
 
         // При клик върху целта, увеличаваме точките
@@ -117,12 +146,13 @@
                 highScore = score;
                 localStorage.setItem('highScore', highScore); // Запазване на рекорда
                 highScoreDisplay.textContent = `Рекорд: ${highScore}`;
-                showFireworks(); // Показване на фойерверки при нов рекорд
+                showConfetti(); // Показване на конфети при нов рекорд
+                showNewRecord(); // Показване на надпис "НОВ РЕКОРД!"
             }
         });
 
         // Преместване на целта на всеки 0.5 секунди
-        setInterval(moveTarget, 500);
+        setInterval(moveTarget, 570);
 
         // Таймер за следене на времето
         setInterval(() => {
