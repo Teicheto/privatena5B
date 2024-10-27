@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат - 5B</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #messages {
+            max-width: 600px;
+            height: 300px;
+            border: 1px solid #ddd;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Чат 5B</h1>
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="Вашето съобщение" />
+    <button id="sendButton">Изпрати</button>
+
+    <!-- Firebase App (добави своя конфигурация тук) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
+    <script>
+        // Конфигурация на Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2VqU8bpJ6OuPpZg2IIhQ3lUJ_XuVClc8",
+            authDomain: "b-chat-mazna6969.firebaseapp.com",
+            databaseURL: "https://b-chat-mazna6969-default-rtdb.firebaseio.com",
+            projectId: "b-chat-mazna6969",
+            storageBucket: "b-chat-mazna6969.appspot.com",
+            messagingSenderId: "1066695843516",
+            appId: "1:1066695843516:web:dcfdd8b8927ce8b9397ab9"  // Замени с твоя appId
+        };
+
+        // Инициализирай Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const messagesRef = database.ref('messages');
+
+        // Изпращане на съобщение
+        document.getElementById('sendButton').addEventListener('click', () => {
+            const messageInput = document.getElementById('messageInput');
+            const messageText = messageInput.value;
+            if (messageText) {
+                messagesRef.push().set({ text: messageText });
+                messageInput.value = '';
+            }
+        });
+
+        // Получаване на съобщения
+        messagesRef.on('child_added', (data) => {
+            const message = data.val();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messageDiv.textContent = message.text;
+            document.getElementById('messages').appendChild(messageDiv);
+            // Скролиране надолу
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        });
+    </script>
+</body>
+</html>
