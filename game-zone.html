@@ -139,7 +139,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Начална страница</title>
+    <title>Крадни Бевро игра</title>
     <style>
         #gameButton {
             font-size: 20px;
@@ -155,6 +155,32 @@
     <script>
         function openGame() {
             window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>
+<p>Пинг-понг игра с бевро койнчета</p>
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пинг-Понг Бевро</title>
+    <style>
+        #gameButton {
+            font-size: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Бутонът, който отваря game.html -->
+    <button id="gameButton" onclick="openGame()">Бевро Пинг-Понг</button>
+
+    <script>
+        function openGame() {
+            window.location.href = 'ping-pong.html';
         }
     </script>
 </body>
