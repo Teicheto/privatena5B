@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гласуване</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #333; /* Тъмен фон */
+            color: white; /* Бял текст */
+        }
+        h1 {
+            color: white; /* Бял цвят за заглавията */
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 16px;
+            color: black; /* Черен текст в полетата */
+        }
+        button {
+            background-color: green; /* Зелен фон за бутоните */
+            color: white; /* Бял текст на бутоните */
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkgreen; /* По-тъмен зелен при задържане */
+        }
+        .candidate-list {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Кандидатстване за избори</h1>
+    <form id="candidateForm">
+        <input type="text" id="candidateName" placeholder="Име на кандидата" required>
+        <button type="submit">Кандидатствай</button>
+    </form>
+
+    <h1>Гласуване</h1>
+    <form id="voteForm">
+        <input type="text" id="voterName" placeholder="Вашето име" required>
+        <select id="candidates" required>
+            <option value="">Изберете кандидат</option>
+            <!-- Тук ще добавиш кандидатите от базата данни -->
+        </select>
+        <button type="submit">Гласувай</button>
+    </form>
+
+    <div class="candidate-list">
+        <h2>Кандидати</h2>
+        <ul id="candidateListDisplay">
+            <!-- Тук ще се показват кандидатурите и гласовете -->
+        </ul>
+    </div>
+
+    <script>
+        // Инициализиране на кандидатите и гласовете от localStorage
+        const candidates = JSON.parse(localStorage.getItem('candidates')) || [];
+        const votes = JSON.parse(localStorage.getItem('votes')) || {};
+
+        document.getElementById('candidateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('candidateName').value;
+
+            // Проверка дали кандидатът вече съществува
+            if (!candidates.includes(name)) {
+                // Добавяне на кандидата в масива
+                candidates.push(name);
+                votes[name] = 0; // Инициализиране на гласовете за кандидата
+                document.getElementById('candidateName').value = ''; // Изчистване на полето
+
+                // Обновяване на списъка с кандидати в гласуването
+                updateCandidatesList();
+                displayCandidates();
+                alert(`${name} е добавен като кандидат!`);
+
+                // Записване на кандидатите и гласовете в localStorage
+                localStorage.setItem('candidates', JSON.stringify(candidates));
+                localStorage.setItem('votes', JSON.stringify(votes));
+            } else {
+                alert(`${name} вече е кандидат!`);
+            }
+        });
+
+        document.getElementById('voteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const candidate = document.getElementById('candidates').value;
+            const voterName = document.getElementById('voterName').value;
+
+            if (candidate) {
+                if (candidate === voterName) {
+                    alert("Не можеш да гласуваш за себе си!");
+                } else {
+                    votes[candidate] += 1; // Увеличаване на гласовете за кандидата
+                    alert(`Гласувахте за ${candidate}!`);
+                    displayCandidates(); // Обновяване на показването на кандидатурите
+
+                    // Записване на обновените гласове в localStorage
+                    localStorage.setItem('votes', JSON.stringify(votes));
+                }
+            }
+        });
+
+        function updateCandidatesList() {
+            const candidatesSelect = document.getElementById('candidates');
+            candidatesSelect.innerHTML = '<option value="">Изберете кандидат</option>'; // Изчистване на текущия списък
+
+            // Добавяне на новите кандидати
+            candidates.forEach((candidate) => {
+                const option = document.createElement('option');
+                option.value = candidate;
+                option.textContent = candidate;
+                candidatesSelect.appendChild(option);
+            });
+        }
+
+        function displayCandidates() {
+            const candidateListDisplay = document.getElementById('candidateListDisplay');
+            candidateListDisplay.innerHTML = ''; // Изчистване на текущия списък
+
+            candidates.forEach((candidate) => {
+                const li = document.createElement('li');
+                li.textContent = `${candidate}: ${votes[candidate]} гласа`;
+                candidateListDisplay.appendChild(li);
+            });
+        }
+
+        // Показване на кандидатите и гласовете при зареждане на страницата
+        updateCandidatesList();
+        displayCandidates();
+    </script>
+</body>
+</html>

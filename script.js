@@ -92,3 +92,57 @@ messageInput.addEventListener('keypress', function(event) {
         sendButton.click(); // Изпраща съобщението при натискане на Enter
     }
 });
+const target = document.getElementById('target');
+const scoreDisplay = document.getElementById('score');
+const startButton = document.getElementById('startButton');
+const gameContainer = document.getElementById('gameContainer');
+
+let score = 0;
+let highScore = localStorage.getItem('circleGameHighScore') || 0;
+let gameActive = false;
+let gameInterval;
+
+function startGame() {
+    score = 0;
+    scoreDisplay.textContent = `Точки: ${score} | Рекорд: ${highScore}`;
+    gameActive = true;
+    target.style.display = 'block';
+    moveTarget();
+
+    // Играта продължава 30 секунди
+    gameInterval = setInterval(moveTarget, 1000);
+    setTimeout(endGame, 30000);
+}
+
+function endGame() {
+    gameActive = false;
+    clearInterval(gameInterval);
+    target.style.display = 'none';
+
+    // Проверка за нов най-добър резултат
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('circleGameHighScore', highScore);
+        alert(`Ново най-добро! Твоите точки са: ${score}`);
+    } else {
+        alert(`Играта приключи! Твоите точки са: ${score}`);
+    }
+    scoreDisplay.textContent = `Точки: ${score} | Рекорд: ${highScore}`;
+}
+
+function moveTarget() {
+    const x = Math.random() * (gameContainer.clientWidth - 50);
+    const y = Math.random() * (gameContainer.clientHeight - 50);
+    target.style.left = `${x}px`;
+    target.style.top = `${y}px`;
+}
+
+target.addEventListener('click', () => {
+    if (gameActive) {
+        score++;
+        scoreDisplay.textContent = `Точки: ${score} | Рекорд: ${highScore}`;
+        moveTarget();
+    }
+});
+
+startButton.addEventListener('click', startGame);
