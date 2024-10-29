@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Only</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            text-align: center;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        input[type="password"] {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Staff Only</h1>
+    <p>Моля, въведете паролата за достъп:</p>
+    <input type="password" id="passwordInput" placeholder="Парола">
+    <button onclick="checkPassword()">Вход</button>
+    <div id="errorMessage" class="error"></div>
+</div>
+
+<script>
+    function checkPassword() {
+        const password = document.getElementById('passwordInput').value;
+        const errorMessage = document.getElementById('errorMessage');
+        
+        if (password === "secret123") { // Замени "secret123" с твоята истинска парола
+            window.location.href = "staff-dashboard.html"; // Замени с истинската защитена страница
+        } else {
+            errorMessage.textContent = "Грешна парола. Опитайте отново.";
+        }
+    }
+</script>
+
+</body>
+</html>
