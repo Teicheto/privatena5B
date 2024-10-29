@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"], input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Настройки</h1>
+
+    <div class="container">
+        <h2>Промяна на парола</h2>
+        <input type="password" id="oldPassword" placeholder="Стара парола">
+        <input type="password" id="newPassword" placeholder="Нова парола">
+        <button onclick="changePassword()">Промени паролата</button>
+
+        <h2>Персонализиране</h2>
+        <input type="text" id="username" placeholder="Ново потребителско име">
+        <button onclick="changeUsername()">Промени името</button>
+    </div>
+
+    <script>
+        function changePassword() {
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            // Логика за промяна на парола
+            alert('Паролата е променена!');
+        }
+
+        function changeUsername() {
+            const username = document.getElementById('username').value;
+            // Логика за промяна на потребителското име
+            alert('Потребителското име е променено на: ' + username);
+        }
+    </script>
+
+</body>
+</html>

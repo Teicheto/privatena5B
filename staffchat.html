@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Staff Chat</h1>
+
+    <div class="container">
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Напиши съобщение...">
+        <button onclick="sendMessage()">Изпрати</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const messagesDiv = document.getElementById('messages');
+            const message = messageInput.value;
+
+            if (message) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                messagesDiv.appendChild(messageElement);
+                messageInput.value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // Превърти надолу
+            }
+        }
+    </script>
+
+</body>
+</html>
