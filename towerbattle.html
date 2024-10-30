@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tower Battle</title>
+    <style>
+        /* Основни стилове за тъмна тема */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(145deg, #121212, #1e1e1e);
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            border: 2px solid #444;
+            box-shadow: inset 0 0 20px #000;
+            overflow: hidden;
+        }
+
+        .tower {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 100px;
+            background-color: #1e90ff;
+            border: 3px solid #000;
+            box-shadow: 0 0 10px #00f, 0 0 20px #1e90ff;
+        }
+
+        .robot {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('robots.jpg');
+            background-size: cover;
+            border-radius: 10%;
+            box-shadow: 0 0 10px #ff4444, 0 0 15px #ff0000;
+            cursor: pointer; /* Добавен курсор при задържане */
+        }
+
+        .apple {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('apples.png');
+            background-size: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff6347, 0 0 20px #ff4500;
+            animation: spin 3s linear infinite, float 2s ease-in-out infinite;
+        }
+
+        .bullet {
+            position: absolute;
+            width: 5px;
+            height: 10px;
+            background-color: #ffff00;
+            box-shadow: 0 0 5px #ff0, 0 0 10px #ff0;
+        }
+
+        /* Стилове за текстови елементи */
+        #health, #coins, #shop {
+            position: absolute;
+            color: #ffffff;
+            z-index: 10;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        #health {
+            top: 10px;
+            left: 10px;
+        }
+
+        #coins {
+            top: 10px;
+            right: 10px;
+        }
+
+        #shop {
+            bottom: 10px;
+            left: 10px;
+        }
+
+        #shop button {
+            background-color: #444;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #shop button:hover {
+            background-color: #666;
+        }
+
+        /* Анимации */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="tower" class="tower"></div>
+        <div id="health">Кръв: <span id="health-value">100</span></div>
+        <div id="coins">Койнчета: <span id="coin-count">0</span></div>
+        <div id="shop">
+            <h2>Магазин</h2>
+            <button onclick="buyHealth()">Купи повече кръв (20 коинчета)</button>
+            <button onclick="buyPower()">Купи сила (30 коинчета)</button>
+        </div>
+    </div>
+    <script>
+        let health = 100;
+        let coins = 0;
+        const healthValue = document.getElementById('health-value');
+        const coinCount = document.getElementById('coin-count');
+
+        function spawnRobot() {
+            const robot = document.createElement('div');
+            robot.className = 'robot';
+            robot.style.left = Math.random() * 100 + 'vw';
+            robot.onclick = function() {
+                coins += 10; // Добавяне на 10 коинчета при клик
+                coinCount.innerText = coins;
+                document.getElementById('game-container').removeChild(robot); // Премахване на робота
+            };
+            document.getElementById('game-container').appendChild(robot);
+            moveRobot(robot);
+        }
+
+        function moveRobot(robot) {
+            let position = 0;
+            const interval = setInterval(() => {
+                if (position >= 550) {
+                    health -= 10;
+                    healthValue.innerText = health;
+                    document.getElementById('game-container').removeChild(robot);
+                    clearInterval(interval);
+                    checkGameOver();
+                } else {
+                    position += 2;
+                    robot.style.bottom = position + 'px';
+                }
+            }, 100);
+        }
+
+        function spawnApple() {
+            const apple = document.createElement('div');
+            apple.className = 'apple';
+            apple.style.left = Math.random() * 100 + 'vw';
+            apple.style.bottom = Math.random() * 100 + 'vh';
+            document.getElementById('game-container').appendChild(apple);
+            apple.onclick = function () {
+                health += 10;
+                healthValue.innerText = health;
+                document.getElementById('game-container').removeChild(apple);
+            }
+        }
+
+        function checkGameOver() {
+            if (health <= 0) {
+                alert('Играта свърши!');
+                resetGame();
+            }
+        }
+
+        function resetGame() {
+            health = 100;
+            coins = 0;
+            healthValue.innerText = health;
+            coinCount.innerText = coins;
+        }
+
+        function buyHealth() {
+            if (coins >= 20) {
+                coins -= 20;
+                health += 20;
+                healthValue.innerText = health;
+                coinCount.innerText = coins;
+            }
+        }
+
+        function buyPower() {
+            if (coins >= 30) {
+                coins -= 30;
+                coinCount.innerText = coins;
+            }
+        }
+
+        document.addEventListener('click', function (e) {
+            if (e.target.id === 'game-container') {
+                const bullet = document.createElement('div');
+                bullet.className = 'bullet';
+                bullet.style.left = '50%';
+                bullet.style.bottom = '100px';
+                document.getElementById('game-container').appendChild(bullet);
+                moveBullet(bullet);
+            }
+        });
+
+        function moveBullet(bullet) {
+            let position = 100;
+            const interval = setInterval(() => {
+                position += 5;
+                bullet.style.bottom = position + 'px';
+
+                // Проверка за сблъсък с роботи
+                document.querySelectorAll('.robot').forEach(robot => {
+                    if (isColliding(bullet, robot)) {
+                        coins += 10; // Добавяне на коинчета при сблъсък
+                        coinCount.innerText = coins;
+                        robot.remove(); // Премахване на робота при сблъсък
+                        bullet.remove(); // Премахване на куршума
+                        clearInterval(interval);
+                    }
+                });
+
+                // Премахване на куршума при достигане на края
+                if (position >= 600) {
+                    bullet.remove();
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+
+        function isColliding(el1, el2) {
+            const rect1 = el1.getBoundingClientRect();
+            const rect2 = el2.getBoundingClientRect();
+            return !(
+                rect1.top > rect2.bottom ||
+                rect1.bottom < rect2.top ||
+                rect1.left > rect2.right ||
+                rect1.right < rect2.left
+            );
+        }
+
+        setInterval(spawnRobot, 3000);
+        setInterval(spawnApple, 5000);
+    </script>
+</body>
+</html>
