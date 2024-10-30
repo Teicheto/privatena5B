@@ -68,6 +68,47 @@
 <body>
 
     <h1>Слушай Музика</h1>
+
+    <div class="content">
+        <!DOCTYPE html>
+        <html lang="bg">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Таймер за време на страницата</title>
+            <style>
+                .message {
+                    display: none;
+                    font-size: 20px;
+                    color: red;
+                    text-align: center;
+                    margin-top: 20px;
+                }
+            </style>
+        </head>
+        <body>
+        
+        <h1>Добре дошъл! Таймерът следи времето, което прекарваш тук.</h1>
+        <div id="timerDisplay">Време на страницата: 0 секунди</div>
+        <div id="message" class="message">Спри уе човек ти немаш живот само музика слушаш</div>
+        
+        <script>
+            let timeOnPage = 0;
+            const timerDisplay = document.getElementById("timerDisplay");
+            const message = document.getElementById("message");
+        
+            const timer = setInterval(() => {
+                timeOnPage++;
+                timerDisplay.textContent = `Време на страницата: ${timeOnPage} секунди`;
+        
+                // Ако времето достигне 500 секунди, изписваме съобщението
+                if (timeOnPage === 1000) {
+                    message.style.display = "block";
+                    clearInterval(timer); // Спира таймера, за да не продължава да се увеличава
+                }
+            }, 1000); // Таймерът се обновява всяка секунда
+        </script>
+    </div>
     
     <!-- Песен 1 -->
     <div>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Списък със задачи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"], input[type="date"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .task-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .task {
+            background-color: #333;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+        }
+        .task-details {
+            font-size: 0.9em;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Списък със задачи</h1>
+
+<div class="container">
+    <input type="text" id="taskInput" placeholder="Добави заглавие на задачата">
+    <input type="text" id="descriptionInput" placeholder="Добави описание">
+    <input type="date" id="deadlineInput">
+    <button onclick="addTask()">Добави задача</button>
+    
+    <div id="taskList" class="task-list"></div>
+</div>
+
+<script>
+    // Зарежда съществуващите задачи от localStorage
+    function loadTasks() {
+        const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        savedTasks.forEach(task => addTaskToDOM(task));
+    }
+
+    // Добавя задача към DOM и localStorage
+    function addTask() {
+        const taskInput = document.getElementById('taskInput').value.trim();
+        const descriptionInput = document.getElementById('descriptionInput').value.trim();
+        const deadlineInput = document.getElementById('deadlineInput').value;
+
+        if (taskInput && descriptionInput && deadlineInput) {
+            const task = { title: taskInput, description: descriptionInput, deadline: deadlineInput };
+            addTaskToDOM(task);
+
+            // Запазва задачата в localStorage
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            tasks.push(task);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+
+            // Изчиства полетата
+            document.getElementById('taskInput').value = '';
+            document.getElementById('descriptionInput').value = '';
+            document.getElementById('deadlineInput').value = '';
+        }
+    }
+
+    function addTaskToDOM(task) {
+        const taskList = document.getElementById('taskList');
+
+        // Създава нов елемент за задача
+        const taskDiv = document.createElement('div');
+        taskDiv.className = 'task';
+        taskDiv.innerHTML = `
+            <strong>${task.title}</strong>
+            <div class="task-details">Описание: ${task.description}</div>
+            <div class="task-details">Краен срок: ${task.deadline}</div>
+            <button onclick="removeTask(this, '${task.title}')">Изтрий</button>
+        `;
+        taskList.appendChild(taskDiv);
+    }
+
+    // Премахва задачата от DOM и localStorage
+    function removeTask(button, taskTitle) {
+        const taskDiv = button.parentElement;
+        taskDiv.remove();
+
+        // Премахва от localStorage
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const updatedTasks = tasks.filter(task => task.title !== taskTitle);
+        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+    }
+
+    // Зарежда задачите при зареждане на страницата
+    loadTasks();
+</script>
+
+</body>
+</html>

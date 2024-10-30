@@ -3,70 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
+    <title>Настройки</title>
     <style>
+        /* Основна настройка за черната тема */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
             background-color: #1e1e1e;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.5s;
         }
-        input[type="text"], input[type="password"] {
-            width: 80%;
+
+        h1 {
+            font-size: 2.2em;
+            color: #00ff7f;
+            text-align: center;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .settings-container {
+            width: 90%;
+            max-width: 500px;
+            background-color: #333333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.8s ease-out;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: 1em;
+            color: #ffffff;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input[type="file"], input[type="checkbox"], select {
+            background-color: #555555;
+            color: #ffffff;
+            border: none;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #333;
             border-radius: 5px;
-            background-color: #333;
-            color: #e0e0e0;
+            width: 100%;
+            margin-top: 8px;
+            margin-bottom: 15px;
         }
+
         button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #00ff7f;
+            color: #1e1e1e;
+            padding: 12px 20px;
             border: none;
             border-radius: 5px;
+            font-size: 1em;
             cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #00e673;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <h1>Настройки</h1>
+<h1>Настройки</h1>
+<div class="settings-container">
+    <label for="backgroundUpload">Качи фон:</label>
+    <input type="file" id="backgroundUpload" accept="image/*">
+    
+    <label for="backgroundMusic">Фонова музика:</label>
+    <input type="checkbox" id="backgroundMusic">
+    
+    <label for="textSizeSelect">Размер на текста:</label>
+    <select id="textSizeSelect">
+        <option value="small">Малък</option>
+        <option value="medium">Среден</option>
+        <option value="large">Голям</option>
+    </select>
 
-    <div class="container">
-        <h2>Промяна на парола</h2>
-        <input type="password" id="oldPassword" placeholder="Стара парола">
-        <input type="password" id="newPassword" placeholder="Нова парола">
-        <button onclick="changePassword()">Промени паролата</button>
+    <button onclick="saveSettings()">Запази настройки</button>
+</div>
 
-        <h2>Персонализиране</h2>
-        <input type="text" id="username" placeholder="Ново потребителско име">
-        <button onclick="changeUsername()">Промени името</button>
-    </div>
+<audio id="backgroundAudio" loop>
+    <source src="https://www.your-audio-file-url.com/song.mp3" type="audio/mp3">
+    Твоят браузър не поддържа аудио елемента.
+</audio>
 
-    <script>
-        function changePassword() {
-            const oldPassword = document.getElementById('oldPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            // Логика за промяна на парола
-            alert('Паролата е променена!');
+<script>
+    function applyTextSize(size) {
+        document.body.style.fontSize = size === 'small' ? '14px' : size === 'medium' ? '18px' : '22px';
+    }
+
+    function applyBackgroundMusic(enable) {
+        let audio = document.getElementById('backgroundAudio');
+        if (enable) {
+            if (!audio) {
+                audio.src = 'https://www.youtube.com/watch?v=gihWXWvfyxc'; // Добавете тук линк към фонова музика
+                audio.loop = true;
+                document.body.appendChild(audio);
+            }
+            audio.play();
+        } else {
+            if (audio) audio.pause();
         }
+    }
 
-        function changeUsername() {
-            const username = document.getElementById('username').value;
-            // Логика за промяна на потребителското име
-            alert('Потребителското име е променено на: ' + username);
+    function saveSettings() {
+        const textSize = document.getElementById('textSizeSelect').value;
+        const backgroundMusic = document.getElementById('backgroundMusic').checked;
+
+        localStorage.setItem('textSize', textSize);
+        localStorage.setItem('backgroundMusic', backgroundMusic);
+
+        // Прилагане на настройките веднага
+        applyTextSize(textSize);
+        applyBackgroundMusic(backgroundMusic);
+
+        alert('Настройките са запазени!');
+    }
+
+    function loadSettings() {
+        const textSize = localStorage.getItem('textSize') || 'medium';
+        const backgroundMusic = localStorage.getItem('backgroundMusic') === 'true';
+
+        document.getElementById('textSizeSelect').value = textSize;
+        document.getElementById('backgroundMusic').checked = backgroundMusic;
+
+        // Прилагане на заредените настройки
+        applyTextSize(textSize);
+        applyBackgroundMusic(backgroundMusic);
+    }
+
+    window.onload = loadSettings;
+
+    // Добавяме обработка за качване на фон
+    document.getElementById('backgroundUpload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.body.style.backgroundImage = `url(${e.target.result})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
         }
-    </script>
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 
 </body>
 </html>

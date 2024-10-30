@@ -146,3 +146,44 @@ target.addEventListener('click', () => {
 });
 
 startButton.addEventListener('click', startGame);
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = 800;
+canvas.height = 600;
+
+let player = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    health: 100,
+    magic: 50
+};
+
+function drawPlayer() {
+    ctx.fillStyle = "#00ff7f";
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, 15, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+function updateStats() {
+    document.getElementById("health").textContent = player.health;
+    document.getElementById("magic").textContent = player.magic;
+}
+
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawPlayer();
+    updateStats();
+    requestAnimationFrame(gameLoop);
+}
+
+document.addEventListener("keydown", (event) => {
+    const speed = 5;
+    if (event.key === "ArrowUp") player.y -= speed;
+    if (event.key === "ArrowDown") player.y += speed;
+    if (event.key === "ArrowLeft") player.x -= speed;
+    if (event.key === "ArrowRight") player.x += speed;
+});
+
+gameLoop();
