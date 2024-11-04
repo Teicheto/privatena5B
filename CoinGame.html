@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <link rel="icon" href="favicon.jpg" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скок на платформите</title>
+    <style>
+        /* Основни стилове */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #2b2b2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        #game-container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background-color: #333;
+            overflow: hidden;
+            border: 2px solid #555;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        }
+        .platform {
+            position: absolute;
+            width: 80px;
+            height: 10px;
+            background-color: #4caf50;
+            box-shadow: 0 0 10px #3e8e41;
+        }
+        .player {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #2196f3;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #1976d2;
+        }
+        .coin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url('coinsforgame.png');
+            background-size: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff0;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
+
+        /* Контролни бутони */
+        .control-button {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #000;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 20px;
+            text-align: center;
+            line-height: 50px;
+            user-select: none;
+        }
+        #left-btn { bottom: 20px; right: 100px; }
+        #right-btn { bottom: 20px; right: 20px; }
+        #jump-btn { bottom: 80px; right: 60px; }
+
+        /* Бутон "Почни отначало" */
+        #restart-btn {
+            display: none; /* Скрит по подразбиране */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="score">Точки: 0</div>
+        <div class="player" id="player"></div>
+
+        <!-- Контролни бутони -->
+        <div id="left-btn" class="control-button">←</div>
+        <div id="right-btn" class="control-button">→</div>
+        <div id="jump-btn" class="control-button">↑</div>
+        <button id="restart-btn">Почни отначало</button> <!-- Бутон за рестарт -->
+    </div>
+
+    <script>
+        const gameContainer = document.getElementById("game-container");
+        const player = document.getElementById("player");
+        const scoreDisplay = document.getElementById("score");
+        const restartButton = document.getElementById("restart-btn");
+        let score = 0;
+
+        // Основни настройки на играча
+        let playerX = 50;
+        let playerY = 300;
+        let playerVelocityY = 0;
+        let gravity = 0.5;
+        let jumpPower = -10;
+        let isJumping = false;
+        let playerVelocityX = 0;
+        const moveSpeed = 5;
+
+        // Платформи
+        const platforms = [
+            { x: 50, y: 350 },
+            { x: 150, y: 280 },
+            { x: 300, y: 220 },
+            { x: 450, y: 150 }
+        ];
+
+        // Създаване на платформи
+        function createPlatforms() {
+            platforms.forEach((platform) => {
+                const div = document.createElement("div");
+                div.classList.add("platform");
+                div.style.left = platform.x + "px";
+                div.style.top = platform.y + "px";
+                gameContainer.appendChild(div);
+            });
+        }
+
+        // Създаване на монета на произволна платформа
+        function spawnCoin() {
+            const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+            const coin = document.createElement("div");
+            coin.classList.add("coin");
+            coin.style.left = randomPlatform.x + 30 + "px";
+            coin.style.top = randomPlatform.y - 20 + "px";
+            gameContainer.appendChild(coin);
+
+            coin.addEventListener("collision", () => {
+                score += 10;
+                scoreDisplay.textContent = "Точки: " + score;
+                coin.remove();
+                spawnCoin();
+            });
+        }
+
+        // Контрол за скок и движение с бутони
+        document.getElementById("jump-btn").addEventListener("click", () => {
+            if (!isJumping) {
+                playerVelocityY = jumpPower;
+                isJumping = true;
+            }
+        });
+        document.getElementById("left-btn").addEventListener("mousedown", () => playerVelocityX = -moveSpeed);
+        document.getElementById("right-btn").addEventListener("mousedown", () => playerVelocityX = moveSpeed);
+        document.getElementById("left-btn").addEventListener("mouseup", () => playerVelocityX = 0);
+        document.getElementById("right-btn").addEventListener("mouseup", () => playerVelocityX = 0);
+
+        // Актуализация на играта
+        function updateGame() {
+            playerVelocityY += gravity;
+            playerY += playerVelocityY;
+            playerX += playerVelocityX;
+
+            // Проверка за граници на полето
+            if (playerX < 0) playerX = 0;
+            if (playerX > gameContainer.clientWidth - 30) playerX = gameContainer.clientWidth - 30;
+
+            // Проверка за платформи
+            platforms.forEach((platform) => {
+                if (
+                    playerX < platform.x + 80 &&
+                    playerX + 30 > platform.x &&
+                    playerY + 30 > platform.y &&
+                    playerY + 30 < platform.y + 10 &&
+                    playerVelocityY > 0
+                ) {
+                    playerY = platform.y - 30;
+                    playerVelocityY = 0;
+                    isJumping = false;
+                }
+            });
+
+            // Проверка за събиране на монети
+            document.querySelectorAll(".coin").forEach((coin) => {
+                const coinX = parseInt(coin.style.left);
+                const coinY = parseInt(coin.style.top);
+                if (
+                    playerX < coinX + 20 &&
+                    playerX + 30 > coinX &&
+                    playerY < coinY + 20 &&
+                    playerY + 30 > coinY
+                ) {
+                    coin.dispatchEvent(new Event("collision"));
+                }
+            });
+
+            // Проверка за падане
+            if (playerY > gameContainer.clientHeight) {
+                alert("Играта приключи! Точки: " + score); // Показване на единственото alert
+                // Показване на бутона за рестарт
+                restartButton.style.display = "block";
+                return;
+            }
+
+            // Актуализация на позицията на играча
+            player.style.left = playerX + "px";
+            player.style.top = playerY + "px";
+
+            requestAnimationFrame(updateGame);
+        }
+
+        // Нулиране на играта
+        function resetGame() {
+            playerX = 50;
+            playerY = 300;
+            playerVelocityY = 0;
+            score = 0;
+            scoreDisplay.textContent = "Точки: " + score;
+            document.querySelectorAll(".coin").forEach((coin) => coin.remove());
+            spawnCoin();
+            restartButton.style.display = "none"; // Скриване на бутона за рестарт
+            updateGame(); // Стартиране на играта отново
+        }
+
+        // Събитие за рестарт на играта
+        restartButton.addEventListener("click", resetGame);
+
+        // Инициализиране на играта
+        createPlatforms();
+        spawnCoin();
+        updateGame();
+    </script>
+</body>
+</html>

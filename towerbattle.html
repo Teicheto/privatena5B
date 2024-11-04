@@ -257,6 +257,127 @@
 
         setInterval(spawnRobot, 3000);
         setInterval(spawnApple, 5000);
+
+        let health = 100;
+let coins = 0;
+const healthValue = document.getElementById('health-value');
+const coinCount = document.getElementById('coin-count');
+
+let isTakingDamage = false; // Предотвратява многократно намаляване на кръвта
+
+function spawnRobot() {
+    const robot = document.createElement('div');
+    robot.className = 'robot';
+    robot.style.left = Math.random() * 100 + 'vw';
+    document.getElementById('game-container').appendChild(robot);
+    moveRobot(robot);
+}
+
+function moveRobot(robot) {
+    let position = 0;
+    const interval = setInterval(() => {
+        if (position >= 550) {
+            clearInterval(interval); // Спиране на движението на робота при достигане на долния край
+            document.getElementById('game-container').removeChild(robot);
+        } else {
+            position += 2;
+            robot.style.bottom = position + 'px';
+            checkCollision(robot); // Проверка за сблъсък с кулата
+        }
+    }, 100);
+}
+
+// Функция за проверка на сблъсък
+function checkCollision(robot) {
+    const tower = document.getElementById('tower');
+    const towerRect = tower.getBoundingClientRect();
+    const robotRect = robot.getBoundingClientRect();
+
+    if (
+        robotRect.left < towerRect.right &&
+        robotRect.right > towerRect.left &&
+        robotRect.bottom >= towerRect.top
+    ) {
+        if (!isTakingDamage) {
+            health -= 10;
+            healthValue.innerText = health;
+            isTakingDamage = true;
+            setTimeout(() => isTakingDamage = false, 1000); // Отлага следващата щета
+            checkGameOver();
+        }
+    }
+}
+
+function spawnApple() {
+    const apple = document.createElement('div');
+    apple.className = 'apple';
+    apple.style.left = Math.random() * 100 + 'vw';
+    apple.style.bottom = Math.random() * 100 + 'vh';
+    document.getElementById('game-container').appendChild(apple);
+    apple.onclick = function () {
+        health += 10;
+        healthValue.innerText = health;
+        document.getElementById('game-container').removeChild(apple);
+    }
+}
+
+function checkGameOver() {
+    if (health <= 0) {
+        alert('Играта свърши!');
+        resetGame();
+    }
+}
+
+function resetGame() {
+    health = 100;
+    coins = 0;
+    healthValue.innerText = health;
+    coinCount.innerText = coins;
+}
+
+function buyHealth() {
+    if (coins >= 20) {
+        coins -= 20;
+        health += 20;
+        healthValue.innerText = health;
+        coinCount.innerText = coins;
+    }
+}
+
+function buyPower() {
+    if (coins >= 30) {
+        coins -= 30;
+        coinCount.innerText = coins;
+    }
+}
+
+document.addEventListener('click', function (e) {
+    if (e.target.id === 'game-container') {
+        const bullet = document.createElement('div');
+        bullet.className = 'bullet';
+        bullet.style.left = '50%';
+        bullet.style.bottom = '100px';
+        document.getElementById('game-container').appendChild(bullet);
+        moveBullet(bullet);
+    }
+});
+
+function moveBullet(bullet) {
+    let position = 100;
+    const interval = setInterval(() => {
+        if (position >= 600) {
+            document.getElementById('game-container').removeChild(bullet);
+            clearInterval(interval);
+        } else {
+            position += 5;
+            bullet.style.bottom = position + 'px';
+        }
+    }, 100);
+}
+
+setInterval(spawnRobot, 3000);
+setInterval(spawnApple, 5000);
+
     </script>
 </body>
 </html>

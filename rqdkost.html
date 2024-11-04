@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <link rel="icon" href="favicon.jpg" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рядкост</title>
+    <style>
+        /* Основни стилове за тъмна тема */
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #2b2b2b;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .photo img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            object-fit: cover;
+            background-color: #444;
+        }
+
+        .name, .description {
+            margin: 15px 0;
+            font-size: 18px;
+            color: #e0e0e0;
+        }
+
+        .stars {
+            margin: 10px 0;
+            font-size: 24px;
+            color: #ffd700;
+        }
+
+        .stars span {
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Място за снимка с img -->
+    <div class="photo">
+        <img src="durveno_bevro.png" alt="Снимка на елемента">
+    </div>
+    
+    <!-- Име на елемента -->
+    <div class="name" id="name">Дървено Бевро</div>
+    
+    <!-- Рядкост в звезди -->
+    <div class="stars" id="rarity">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span> <!-- Примерно: 3 звезди от 5 -->
+    </div>
+    
+    <!-- Описание на елемента -->
+    <div class="description" id="description">Бевро в дървен цвят.</div>
+</div>
+
+<script>
+    // Примерни данни (можеш да ги замениш с реални данни)
+    document.getElementById("name").textContent = "Дървено Бевро";
+    document.getElementById("description").textContent = "Бавро в дървен цвят.";
+    
+    // Можеш да смениш броя звезди, като промениш вътрешността на елемента с id="rarity"
+    document.getElementById("rarity").innerHTML = '<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>';
+</script>
+
+</body>
+</html>
