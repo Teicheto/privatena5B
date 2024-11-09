@@ -187,3 +187,46 @@ document.addEventListener("keydown", (event) => {
 });
 
 gameLoop();
+const express = require('express');
+const fs = require('fs');
+const app = express();
+const PORT = 3000;
+
+// За да можем да четем JSON данни от POST заявки
+app.use(express.json());
+
+// Четене на продуктите
+app.get('/products', (req, res) => {
+    fs.readFile('products.json', 'utf-8', (err, data) => {
+        if (err) {
+            return res.status(500).send('Грешка при четене на продуктите');
+        }
+        res.send(JSON.parse(data));
+    });
+});
+
+// Добавяне на нов продукт
+app.post('/add-product', (req, res) => {
+    const newProduct = req.body;
+
+    fs.readFile('products.json', 'utf-8', (err, data) => {
+        if (err) {
+            return res.status(500).send('Грешка при четене на продуктите');
+        }
+
+        const products = JSON.parse(data);
+        products.push(newProduct);
+
+        fs.writeFile('products.json', JSON.stringify(products, null, 2), (err) => {
+            if (err) {
+                return res.status(500).send('Грешка при записване на продукта');
+            }
+            res.send('Продуктът е добавен успешно!');
+        });
+    });
+});
+
+// Стартиране на сървъра
+app.listen(PORT, () => {
+    console.log(`Сървърът е стартиран на http://localhost:${PORT}`);
+});

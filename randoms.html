@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randoms - Шеги, Идеи, Пароли, Вдъхновение</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background-color: #ffcc00;
+            padding: 20px;
+            color: #fff;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        .content {
+            margin: 30px auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #ff6600;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #ff6600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff3300;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Randoms</h1>
+        <p>Вашият сайт за случайни шеги, идеи, пароли и вдъхновение!</p>
+    </header>
+
+    <div class="content">
+
+        <!-- Смях със случайни шеги -->
+        <section id="jokes">
+            <h2>Смях - Случайни Шеги</h2>
+            <button onclick="getJoke()">Вземи шега</button>
+            <p id="joke">Ще се появи шега тук...</p>
+        </section>
+
+        <!-- Генератор на имена и идеи -->
+        <section id="name-idea">
+            <h2>Генератор на Имена или Идеи</h2>
+            <button onclick="generateName()">Генерирай име/идея</button>
+            <p id="name-idea-result">Ще се появи идея тук...</p>
+        </section>
+
+        <!-- Прост генератор на пароли -->
+        <section id="password-generator">
+            <h2>Генератор на Пароли</h2>
+            <button onclick="generatePassword()">Генерирай парола</button>
+            <p id="password">Ще се появи парола тук...</p>
+        </section>
+
+        <!-- Вдъхновяващи съобщения (Rizz) -->
+        <section id="rizz">
+            <h2>Вдъхновяващи съобщения (Rizz)</h2>
+            <button onclick="getRizzMessage()">Вземи вдъхновение</button>
+            <p id="rizz-message">Ще се появи съобщение тук...</p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>Сайтът е създаден от Теодор Филипов, 5Б клас, гр. Велинград</p>
+    </footer>
+
+    <script>
+        // Масив с шеги
+        const jokes = [
+            "Какво казал 1, като срещнал 0? - Ти си голям!",
+            "Защо програмите не могат да ядат? Защото не могат да си създадат храна.",
+            "Какво е най-голямото чудо на света? - Хубава програма без бъгове.",
+            "Каква е разликата между HTML и CSS? - HTML е съдържанието, а CSS е как изглежда!"
+        ];
+
+        // Масив с идеи/имена
+        const nameIdeas = [
+            "Браво Джунгла",
+            "Шоколадова Луна",
+            "Златен Феникс",
+            "Летяща Костенурка"
+        ];
+
+        // Масив с вдъхновяващи съобщения (Rizz)
+        const rizzMessages = [
+            "Животът е кратък, не губи време с неща, които не те правят щастлив.",
+            "Не чакай утре, започни днес.",
+            "Не спирай да вярваш в себе си. Ти си по-силен, отколкото мислиш.",
+            "Всеки ден е нов шанс за успех!"
+        ];
+
+        // Функция за показване на случайна шега
+        function getJoke() {
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            document.getElementById('joke').innerText = randomJoke;
+        }
+
+        // Функция за генериране на случайно име или идея
+        function generateName() {
+            const randomName = nameIdeas[Math.floor(Math.random() * nameIdeas.length)];
+            document.getElementById('name-idea-result').innerText = randomName;
+        }
+
+        // Функция за генериране на случайна парола
+        function generatePassword() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+            let password = '';
+            for (let i = 0; i < 12; i++) {
+                password += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            document.getElementById('password').innerText = password;
+        }
+
+        // Функция за показване на вдъхновяващо съобщение (Rizz)
+        function getRizzMessage() {
+            const randomRizz = rizzMessages[Math.floor(Math.random() * rizzMessages.length)];
+            document.getElementById('rizz-message').innerText = randomRizz;
+        }
+    </script>
+</body>
+</html>
