@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Викторина за 5-ти клас</title>
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #ffcc00;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .question-container {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 18px;
+            color: #ffcc00;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            margin-top: 15px;
+        }
+
+        .option {
+            background-color: #444;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #555;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .answer-status {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .correct {
+            color: #00ff00;
+        }
+
+        .incorrect {
+            color: #ff0000;
+        }
+
+        .locked-message {
+            color: #ffcc00;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .already-answered-message {
+            color: #ff0000;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .unlock-button {
+            background-color: #ffcc00;
+            border: none;
+            color: #1c1c1c;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .unlock-button:hover {
+            background-color: #ff9900;
+        }
+    </style>
+</head>
+<body>
+    <h1>Викторина за 5-ти клас</h1>
+    <div class="question-container" id="quiz-container">
+        <p class="question" id="question">Въпросът ще се появи тук</p>
+        <div class="options" id="options"></div>
+    </div>
+    <div class="result" id="result"></div>
+    <div id="lockedMessage" class="locked-message" style="display: none;">
+        Тестът е заключен. Резултатите са запазени.
+    </div>
+    <div id="alreadyAnsweredMessage" class="already-answered-message" style="display: none;">
+        Този тест е вече решен. Не можете да го решите отново.
+    </div>
+
+    <button id="unlockButton" class="unlock-button" style="display: none;" onclick="unlockQuiz()">Отключи теста</button>
+
+    <script>
+        const quizData = [
+            // История
+            {question: "Кой е първият български цар?", options: ["Симеон", "Борис I", "Крум"], answer: "Борис I"},
+            {question: "Коя година е основана България?", options: ["681 г.", "716 г.", "912 г."], answer: "681 г."},
+            {question: "Коя е битката при Ахелой?", options: ["Победа на Симеон", "Поражение на Симеон", "Мирно споразумение"], answer: "Победа на Симеон"},
+            {question: "Кой въвежда кирилицата?", options: ["Борис I", "Симеон", "Кирил и Методий"], answer: "Борис I"},
+            {question: "Кой е първият български светец?", options: ["Иван Рилски", "Климент Охридски", "Симеон"], answer: "Иван Рилски"},
+            // География
+            {question: "Коя е най-дългата река в България?", options: ["Дунав", "Марица", "Искър"], answer: "Дунав"},
+            {question: "Коя е столицата на България?", options: ["София", "Пловдив", "Варна"], answer: "София"},
+            {question: "Коя е най-високата планина в България?", options: ["Рила", "Пирин", "Стара планина"], answer: "Рила"},
+            {question: "Кой е най-големият град след София?", options: ["Пловдив", "Варна", "Бургас"], answer: "Пловдив"},
+            {question: "Какво е Дунав?", options: ["Река", "Планина", "Град"], answer: "Река"},
+            // Математика
+            {question: "Колко е 50 + 25?", options: ["75", "70", "65"], answer: "75"},
+            {question: "Колко е 15 * 2?", options: ["30", "25", "35"], answer: "30"},
+            {question: "Колко е 100 / 4?", options: ["25", "30", "20"], answer: "25"},
+            {question: "Колко е 36 + 14?", options: ["50", "45", "40"], answer: "50"},
+            {question: "Колко е 9 * 5?", options: ["45", "50", "40"], answer: "45"},
+            // Български език
+            {question: "Кой е авторът на „Под игото“?", options: ["Иван Вазов", "Христо Ботев", "Елин Пелин"], answer: "Иван Вазов"},
+            {question: "Кой е авторът на „Аз съм българче“?", options: ["Иван Вазов", "Христо Ботев", "Елин Пелин"], answer: "Иван Вазов"},
+            {question: "Какво е съществително име?", options: ["Предмет", "Действие", "Прилежателно"], answer: "Предмет"},
+            {question: "Кое е определението за глагол?", options: ["Действие", "Съществително име", "Прилагателно име"], answer: "Действие"},
+            {question: "Какво е прилагателно име?", options: ["Качество на предмет", "Съществително име", "Глагол"], answer: "Качество на предмет"},
+            // Човекът и природата
+            {question: "Какво е метаморфоза?", options: ["Превръщане на животно", "Промяна на клетка", "Слънчево затъмнение"], answer: "Превръщане на животно"},
+            {question: "Кое е основно състояние на водата?", options: ["Течно", "Газообразно", "Твърдо"], answer: "Течно"},
+            {question: "Какво е енергия?", options: ["Способност за работа", "Вещество", "Живот"], answer: "Способност за работа"},
+            {question: "Коя е най-близката звезда до Земята?", options: ["Слънцето", "Алфа Кентавър", "Сириус"], answer: "Слънцето"},
+            {question: "Какво е кислород?", options: ["Елемент", "Съединение", "Изотоп"], answer: "Елемент"},
+            // Музика
+            {question: "Кой е авторът на „Многая лета“?", options: ["Добри Христов", "Петко Славейков", "Йордан Йовков"], answer: "Добри Христов"},
+            {question: "Коя е основната характеристика на народната музика?", options: ["Ритъм", "Мелодия", "Импровизация"], answer: "Импровизация"},
+            {question: "Кой е известен композитор от българската класическа музика?", options: ["Панчо Владигеров", "Йордан Йовков", "Иван Вазов"], answer: "Панчо Владигеров"},
+            {question: "Какво е хор?", options: ["Група от певци", "Група от танцьори", "Инструмент"], answer: "Група от певци"},
+            {question: "Какво е пиано?", options: ["Музикален инструмент", "Танц", "Песен"], answer: "Музикален инструмент"},
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        const answers = [];
+
+        // Проверка дали тестът е вече завършен
+        if (localStorage.getItem("quizCompleted")) {
+            document.getElementById("quiz-container").style.display = "none";
+            document.getElementById("lockedMessage").style.display = "block";
+            document.getElementById("alreadyAnsweredMessage").style.display = "block"; // Показваме съобщението за вече решен тест
+            document.getElementById("unlockButton").style.display = "inline-block"; // Показваме бутона за отключване
+            displayResults();
+        } else {
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const quiz = quizData[currentQuestion];
+            document.getElementById("question").innerText = quiz.question;
+            const options = document.getElementById("options");
+            options.innerHTML = "";
+            quiz.options.forEach(option => {
+                const button = document.createElement("button");
+                button.className = "option";
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                options.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected) {
+            const correct = quizData[currentQuestion].answer;
+            answers.push({question: quizData[currentQuestion].question, selected, correct});
+            if (selected === correct) score++;
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            localStorage.setItem("quizCompleted", "true"); // Записваме, че тестът е завършен
+            localStorage.setItem("quizScore", score); // Записваме резултата в localStorage
+            document.getElementById("quiz-container").style.display = "none";
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultDiv = document.getElementById("result");
+            const scoreFromStorage = localStorage.getItem("quizScore");
+            resultDiv.innerHTML = `<p>Вашият резултат е: ${scoreFromStorage} от ${quizData.length}</p>`;
+
+            // Изчисляване на оценка в диапазона от 2 до 6
+            const percentage = (scoreFromStorage / quizData.length); // Процент правилни отговори
+            let grade = 2 + (percentage * 4); // Линейна зависимост: 0% -> 2, 100% -> 6
+            grade = Math.max(2, Math.min(6, grade)); // Ограничаваме оценката между 2 и 6
+
+            resultDiv.innerHTML += `<p>Вашата оценка: ${grade.toFixed(2)} от 6</p>`;
+
+            answers.forEach(answer => {
+                const answerStatus = document.createElement("div");
+                answerStatus.className = "answer-status";
+                const questionText = document.createElement("p");
+                questionText.innerText = `${answer.question} - Твоят отговор: ${answer.selected} `;
+                
+                const answerIcon = document.createElement("span");
+                if (answer.selected === answer.correct) {
+                    answerIcon.className = "correct";
+                    answerIcon.innerText = "✓ Верен";
+                } else {
+                    answerIcon.className = "incorrect";
+                    answerIcon.innerText = `✗ Грешен (Верен отговор: ${answer.correct})`;
+                }
+
+                answerStatus.appendChild(questionText);
+                answerStatus.appendChild(answerIcon);
+                resultDiv.appendChild(answerStatus);
+            });
+        }
+
+        function unlockQuiz() {
+            // Премахваме запазените стойности в localStorage
+            localStorage.removeItem("quizCompleted");
+            localStorage.removeItem("quizScore");
+
+            // Отключваме теста и го показваме отново
+            document.getElementById("quiz-container").style.display = "block";
+            document.getElementById("lockedMessage").style.display = "none";
+            document.getElementById("alreadyAnsweredMessage").style.display = "none";
+            document.getElementById("unlockButton").style.display = "none";
+
+            // Рестартираме въпросите
+            currentQuestion = 0;
+            score = 0;
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>
