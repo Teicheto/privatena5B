@@ -285,6 +285,32 @@
 
  </div>
 
+ <div id="fallingElements"></div>
+ <script>
+    function createFallingElement() {
+       const element = document.createElement("div");
+       element.innerText = "❄️";
+       element.style.position = "fixed";
+       element.style.left = Math.random() * window.innerWidth + "px";
+       element.style.top = "-50px";
+       element.style.fontSize = Math.random() * 20 + 10 + "px";
+       element.style.animation = "fall " + (Math.random() * 3 + 2) + "s linear infinite";
+       document.getElementById("fallingElements").appendChild(element);
+ 
+       // Премахва снежинката, когато падне извън екрана
+       setTimeout(() => element.remove(), 5000);
+    }
+    
+    // Намали честотата на създаване на снежинки
+    setInterval(createFallingElement, 2000);
+ </script>
+ <style>
+    @keyframes fall {
+       to { transform: translateY(100vh); }
+    }
+ </style>
+ 
+
 
     <footer>
         Създадено от Теодор Филипов, 5Б клас, гр. Велинград
