@@ -86,6 +86,44 @@
         <p>Тук можете да научите всичко за валутата "Бевро", както и да получите информация за текущите новини, мисии и игрови зони на 5Б клас.</p>
     </div>
 
+<div class="content">
+    <img src="chasovnik.webp" alt="panda_gumichka" width="300">
+    <p>Име: BSPORTS</p>
+    <p>Записване: 50 ст.</p>
+    <p>Описание: Ела и се забавлявай.Великият победител печели часовник</p>
+</div>
+
+<div class="content">
+    <div>↓↓↓Виж колко дена остават до Коледа и тичай да украсяваш.</div>
+    <div id="countdown"></div>
+
+    <script>
+        // Дата на крайния срок
+        const deadline = new Date("December 24, 2024 23:59:59").getTime();
+
+        // Обновяване на таймера всяка секунда
+        const countdownFunction = setInterval(() => {
+            const now = new Date().getTime();
+            const timeLeft = deadline - now;
+
+            // Изчисляване на дните, часовете, минутите и секундите
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            // Показване на резултата в HTML елемента
+            document.getElementById("countdown").innerHTML = 
+                days + "д " + hours + "ч " + minutes + "м " + seconds + "с ";
+
+            // Край на таймера, когато времето изтече
+            if (timeLeft < 0) {
+                clearInterval(countdownFunction);
+                document.getElementById("countdown").innerHTML = "Край с картите!";
+            }
+        }, 1000);
+    </script>
+</div>
 
     <div class="content">
         <h2>СЛУШАЙ СИ МУЗИКА</h2>
