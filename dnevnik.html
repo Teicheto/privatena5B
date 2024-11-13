@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личен дневник</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2b2b2b;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        }
+
+        h1 {
+            color: #4caf50;
+            text-align: center;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444;
+            color: #fff;
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .notes {
+            margin-top: 20px;
+        }
+
+        .note {
+            background-color: #555;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #ddd;
+            position: relative;
+        }
+
+        .note-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #aad400;
+        }
+
+        .delete-button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 8px;
+            border: none;
+            background-color: #e74c3c;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Личен дневник</h1>
+    <input type="text" id="note-name" placeholder="Въведете име...">
+    <input type="date" id="note-date">
+    <textarea id="note-input" placeholder="Въведете бележка..."></textarea>
+    <button onclick="saveNote()">Запази бележка</button>
+    
+    <div class="notes" id="notes-container"></div>
+</div>
+
+<script>
+    // Зареждане на съществуващите бележки от Local Storage
+    function loadNotes() {
+        const notesContainer = document.getElementById("notes-container");
+        notesContainer.innerHTML = ""; // Изчистване на контейнера
+        const notes = JSON.parse(localStorage.getItem("notes")) || [];
+        
+        notes.forEach((note, index) => {
+            const noteDiv = document.createElement("div");
+            noteDiv.classList.add("note");
+
+            // Добавяне на заглавие с име и дата
+            const noteHeader = document.createElement("div");
+            noteHeader.classList.add("note-header");
+            noteHeader.textContent = `Име: ${note.name} | Дата: ${note.date}`;
+            noteDiv.appendChild(noteHeader);
+
+            // Добавяне на съдържанието на бележката
+            const noteText = document.createElement("div");
+            noteText.textContent = note.text;
+            noteDiv.appendChild(noteText);
+
+            // Добавяне на бутон за изтриване под бележката
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete-button");
+            deleteButton.textContent = "Изтрий";
+            deleteButton.onclick = () => deleteNote(index);
+            noteDiv.appendChild(deleteButton);
+
+            notesContainer.appendChild(noteDiv);
+        });
+    }
+
+    // Запазване на нова бележка
+    function saveNote() {
+        const noteName = document.getElementById("note-name").value.trim();
+        const noteDate = document.getElementById("note-date").value;
+        const noteText = document.getElementById("note-input").value.trim();
+
+        if (noteName && noteDate && noteText) {
+            const notes = JSON.parse(localStorage.getItem("notes")) || [];
+            const newNote = { name: noteName, date: noteDate, text: noteText };
+            notes.push(newNote);
+            localStorage.setItem("notes", JSON.stringify(notes));
+
+            // Изчистване на полетата
+            document.getElementById("note-name").value = "";
+            document.getElementById("note-date").value = "";
+            document.getElementById("note-input").value = "";
+
+            loadNotes();
+        } else {
+            alert("Моля, попълнете всички полета.");
+        }
+    }
+
+    // Функция за изтриване на бележка
+    function deleteNote(index) {
+        const notes = JSON.parse(localStorage.getItem("notes")) || [];
+        notes.splice(index, 1); // Премахване на бележката по индекс
+        localStorage.setItem("notes", JSON.stringify(notes));
+        loadNotes(); // Презареждане на бележките
+    }
+
+    // Зареждане на бележките при отваряне на страницата
+    loadNotes();
+</script>
+
+</body>
+</html>
