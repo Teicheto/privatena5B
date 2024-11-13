@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мистериозна Кутия с Значки</title>
+    <style>
+        /* CSS стил за кутията и значките */
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        #mystery-box-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #mystery-box {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+        #timer-message {
+            margin-top: 10px;
+            color: #fff;
+            font-size: 18px;
+        }
+        #badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .badge-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+        }
+        .badge {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #fff;
+        }
+        .status-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #000;
+            color: #fff;
+            padding: 2px 5px;
+            border-radius: 50%;
+            font-size: 16px;
+        }
+        nav {
+            background-color: #1f1f1f;
+            padding: 10px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Начало</a>
+        <a href="bevro-balance.html">Бевро Баланс</a>
+        <a href="news.html">Новини</a>
+        <a href="store.html">Магазин</a>
+        <a href="code.html">Код</a>
+        <a href="missions.html">Мисии</a>
+        <a href="game-zone.html">5Б Game Zone</a>
+        <a href="badges.html">Значки</a>
+    </nav>
+
+    <!-- HTML част за кутиите и таймера -->
+    <div id="mystery-box-container">
+        <img id="mystery-box" src="randombox.png" alt="Mystery Box" onclick="openBox()">
+        <p id="timer-message"></p>
+    </div>
+
+    <!-- Контейнер за значките -->
+    <div id="badges-container">
+        <!-- Всички значки ще бъдат добавени тук чрез JavaScript -->
+    </div>
+
+    <!-- JavaScript логика за функцията на кутиите, значките и таймера -->
+    <script>
+        // Награди в масив с URL на изображенията и статус
+        const rewards = [
+            { image: "badge1.jpg", earned: false },
+            { image: "badge2.jpg", earned: false },
+            { image: "badge3.jpg", earned: false },
+            { image: "badge4.jpg", earned: false },
+            // Добавете още значки по желание
+        ];
+
+        let boxesOpenedToday = 0;
+        let lastOpened = localStorage.getItem("lastOpened");
+        const cooldown = 24 * 60 * 60 * 1000; // 24 часа в милисекунди
+
+        function updateTimer() {
+            if (lastOpened) {
+                const timePassed = Date.now() - lastOpened;
+                const timeLeft = cooldown - timePassed;
+                if (timeLeft > 0) {
+                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    document.getElementById("timer-message").textContent = 
+                        `След ${hours} часа и ${minutes} минути ще можете да отворите кутия.`;
+                    document.getElementById("mystery-box").style.pointerEvents = "none";
+                } else {
+                    document.getElementById("timer-message").textContent = "Можете да отворите кутия.";
+                    document.getElementById("mystery-box").style.pointerEvents = "auto";
+                }
+            }
+        }
+
+        function openBox() {
+            if (boxesOpenedToday >= 2) {
+                alert("Вече отворихте 2 кутии за днес!");
+                return;
+            }
+
+            // Случаен избор на награда
+            const rewardIndex = Math.floor(Math.random() * rewards.length);
+            const selectedReward = rewards[rewardIndex];
+
+            // Актуализация на статуса на наградата
+            if (!selectedReward.earned) {
+                selectedReward.earned = true;
+                alert("Спечелихте значка!");
+            } else {
+                alert("Получихте дублираща значка!");
+            }
+
+            boxesOpenedToday++;
+            lastOpened = Date.now();
+            localStorage.setItem("lastOpened", lastOpened);
+
+            // Деактивиране на кутията за 24 часа
+            document.getElementById("mystery-box").style.pointerEvents = "none";
+            updateTimer();
+
+            // Обновяване на значките
+            displayBadges();
+        }
+
+        function displayBadges() {
+            const badgesContainer = document.getElementById("badges-container");
+            badgesContainer.innerHTML = ""; // Изчистване на предишните значки
+
+            rewards.forEach((reward) => {
+                const badgeWrapper = document.createElement("div");
+                badgeWrapper.classList.add("badge-wrapper");
+
+                const rewardImage = document.createElement("img");
+                rewardImage.src = reward.image;
+                rewardImage.alt = "Значка";
+                rewardImage.classList.add("badge");
+
+                const statusIcon = document.createElement("div");
+                statusIcon.classList.add("status-icon");
+                statusIcon.textContent = reward.earned ? "✔" : "✖";
+
+                badgeWrapper.appendChild(rewardImage);
+                badgeWrapper.appendChild(statusIcon);
+                badgesContainer.appendChild(badgeWrapper);
+            });
+        }
+
+        // Обновяване на таймера и показване на значките при зареждане на страницата
+        window.onload = function () {
+            updateTimer();
+            setInterval(updateTimer, 60000); // Обновяване всяка минута
+            displayBadges(); // Показване на всички значки
+        };
+    </script>
+</body>
+</html>
