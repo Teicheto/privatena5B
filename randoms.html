@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bg">
 <head>
+    <link rel="icon" href="favicon.jpg" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Randoms - Шеги, Идеи, Пароли, Вдъхновение</title>
@@ -61,6 +62,14 @@
             padding: 10px;
             text-align: center;
         }
+        .clock-container {
+            text-align: center;
+            font-size: 2em;
+            background-color: #ffcc00;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -98,6 +107,60 @@
             <button onclick="getRizzMessage()">Вземи вдъхновение</button>
             <p id="rizz-message">Ще се появи съобщение тук...</p>
         </section>
+
+        <!DOCTYPE html>
+        <html lang="bg">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Генератор на случайни меми</title>
+        </head>
+        <body style="text-align: center; font-family: Arial, sans-serif;">
+            <h2>Случайно смешно изображение</h2>
+            
+            <!-- Изображението ще се показва тук -->
+            <img id="randomImage" src="" alt="Неправилно зареден meme" width="400px" style="margin-bottom: 20px;">
+            
+            <!-- Бутон за генериране на ново меме -->
+            <div>
+                <button onclick="generateMeme()">Генерирай меме</button>
+            </div>
+            
+            <script>
+                // Масив с имена на локални изображения
+                const images = [
+                    "meme1.jfif",  // Локално изображение
+                    "meme2.jfif",  // Локално изображение
+                    "meme3.jpg",  // Локално изображение
+                    "meme4.jfif"   // Локално изображение
+                ];
+        
+                // Функция за избиране на случайно изображение
+                function getRandomImage() {
+                    const randomIndex = Math.floor(Math.random() * images.length);
+                    return images[randomIndex];
+                }
+        
+                // Функция за генериране на ново меме при натискане на бутона
+                function generateMeme() {
+                    document.getElementById("randomImage").src = getRandomImage();
+                }
+        
+                // Зареждаме първоначално случайно изображение при първоначално зареждане на страницата
+                generateMeme();
+            </script>
+        </body>
+        </html>
+               
+
+
+        <div class="clock-container">
+            <h2>Календара Днес</h2>
+            <p id="date"></p>
+            <p id="time"></p>
+        </div>
+    
+
 
     </div>
 
@@ -251,7 +314,7 @@
 
         // Функция за генериране на случайна парола
         function generatePassword() {
-            const characters = 'ABCDEFGJKLMSTUVWXvwxyz012345678969()';
+            const characters = 'ABCDEFGKLMSTUVWXvwxyz012345678969';
             let password = '';
             for (let i = 0; i < 12; i++) {
                 password += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -264,6 +327,25 @@
             const randomRizz = rizzMessages[Math.floor(Math.random() * rizzMessages.length)];
             document.getElementById('rizz-message').innerText = randomRizz;
         }
+
+        function updateClock() {
+            const now = new Date();
+
+            // Ден, месец и година
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('bg-BG', options);
+
+            // Час, минути и секунди
+            const timeStr = now.toLocaleTimeString('bg-BG');
+
+            // Обновяване на елементите
+            document.getElementById('date').textContent = dateStr;
+            document.getElementById('time').textContent = timeStr;
+        }
+
+        // Обновяване на всяка секунда
+        setInterval(updateClock, 1000);
+        updateClock(); // Първоначално извикване за моментално показване
     </script>
 </body>
 </html>
