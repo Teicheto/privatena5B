@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bg">
 <head>
+    <link rel="icon" href="favicon.jpg" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мистериозна Кутия с Значки</title>
@@ -37,7 +38,6 @@
             margin-top: 20px;
         }
         .badge-wrapper {
-            position: relative;
             display: inline-block;
             margin: 10px;
         }
@@ -45,16 +45,11 @@
             width: 100px;
             height: 100px;
             border: 2px solid #fff;
+            filter: grayscale(100%); /* Всички значки по подразбиране са в сиво */
+            transition: filter 0.3s;
         }
-        .status-icon {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: #000;
-            color: #fff;
-            padding: 2px 5px;
-            border-radius: 50%;
-            font-size: 16px;
+        .earned {
+            filter: none; /* Цветна значка */
         }
     </style>
 </head>
@@ -74,7 +69,7 @@
     <script>
         // Награди в масив с URL на изображенията и статус
         const rewards = [
-        { image: "badge1.jpg", earned: false },
+            { image: "badge1.jpg", earned: false },
             { image: "badge2.jpg", earned: false },
             { image: "badge3.jpg", earned: false },
             { image: "badge4.jpg", earned: false },
@@ -145,12 +140,12 @@
                 rewardImage.alt = "Значка";
                 rewardImage.classList.add("badge");
 
-                const statusIcon = document.createElement("div");
-                statusIcon.classList.add("status-icon");
-                statusIcon.textContent = reward.earned ? "✔" : "✖";
+                // Проверка дали значката е спечелена
+                if (reward.earned) {
+                    rewardImage.classList.add("earned"); // Премахва сивия филтър
+                }
 
                 badgeWrapper.appendChild(rewardImage);
-                badgeWrapper.appendChild(statusIcon);
                 badgesContainer.appendChild(badgeWrapper);
             });
         }
