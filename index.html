@@ -430,6 +430,43 @@
 
  </div>
 
+ <div class="content">
+    <p>Записвай и не забравяй с Бевро дневникът</p>
+    <!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест</title>
+    <style>
+        /* Стилове за бутона */
+        .green-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .green-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="green-button" onclick="openDnevnik()">Отвори електронен дневник</button>
+
+    <script>
+        function openDnevnik() {
+            window.location.href = 'dnevnik.html';
+        }
+    </script>
+
+ </div>
+
  <div id="fallingElements"></div>
  <script>
     function createFallingElement() {
