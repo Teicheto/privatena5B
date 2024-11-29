@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бевро Видео Новини</title>
+    <style>
+        /* Общи настройки за тъмен стил */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #1f1f1f;
+            border-bottom: 2px solid #444;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #ffdd57; /* Ярък акцент */
+        }
+
+        .news-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .news-item {
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .news-item video {
+            width: 100%;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .news-item h2 {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            color: #ffdd57;
+        }
+
+        .news-item p {
+            font-size: 1rem;
+            color: #cccccc;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #1f1f1f;
+            border-top: 2px solid #444;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Бевро Видео Новини</h1>
+    </header>
+    <main class="news-container">
+        <div class="news-item">
+            <video controls>
+                <source src="bevroNEWS1.mp4" type="video/mp4">
+                Вашият браузър не поддържа видеото.
+            </video>
+            <h2>Коледна украса със интервюта</h2>
+            <p>Разкарване из класната стая и интервиране на всички от класа.</p>
+        </div>
+        <div class="news-item">
+            <video controls>
+                <source src="videos/news2.mp4" type="video/mp4">
+                Вашият браузър не поддържа видеото.
+            </video>
+            <h2>Заглавие на новина 2</h2>
+            <p>Описание на втората новина. Добави интересни детайли или важна информация.</p>
+        </div>
+        <!-- Добави още новини -->
+    </main>
+    <footer class="footer">
+        <p>© 2024 Бевро Видео Новини. Всички права запазени.</p>
+    </footer>
+</body>
+</html>
