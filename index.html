@@ -101,7 +101,6 @@
 <script>
     // Награди в масив с URL на изображенията
     const rewards = [
-        { image: "badge1.jpg", earned: false },
         { image: "badge2.jpg", earned: false },
         { image: "badge3.jpg", earned: false },
         { image: "badge4.jpg", earned: false },
@@ -198,6 +197,7 @@
 </style>
 
 </div>
+
 
 
 <div class="content">
@@ -350,7 +350,7 @@
  </div>
 
  <div class="content">
-    <p>Eла тук ако си стаф</p>
+    <p>Eла тук ако си 69 news стаф</p>
     <button onclick="window.location.href='5Bstaffonlyonlyfansforgootmaini.html'" 
         style="font-size: 16px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
     Staff Only
@@ -466,6 +466,94 @@
     </script>
 
  </div>
+
+<div class="content">
+    <div id="mood-section" style="text-align: center; color: #ffffff;">
+        <h1>Как се чувстваш днес?</h1>
+        <div class="mood-container" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+            <div class="mood" onclick="submitMood('😊')" style="cursor: pointer; padding: 10px; font-size: 24px;">😊 Радост</div>
+            <div class="mood" onclick="submitMood('😐')" style="cursor: pointer; padding: 10px; font-size: 24px;">😐 Неутрално</div>
+            <div class="mood" onclick="submitMood('😢')" style="cursor: pointer; padding: 10px; font-size: 24px;">😢 Тъжно</div>
+            <div class="mood" onclick="submitMood('😡')" style="cursor: pointer; padding: 10px; font-size: 24px;">😡 Ядосано</div>
+        </div>
+        <p id="responseMessage"></p>
+    
+        <div class="history" style="margin-top: 30px;">
+            <h2>История на настроенията</h2>
+            <ul id="moodHistory" style="list-style-type: none; padding: 0;"></ul>
+        </div>
+    </div>
+    
+    <script>
+        function submitMood(mood) {
+            const today = new Date().toISOString().split('T')[0];
+            const lastMoodDate = localStorage.getItem('mood_date');
+            
+            // Проверка дали е гласувано днес
+            if (lastMoodDate === today) {
+                document.getElementById('responseMessage').textContent = "Вече сте избрали настроение за днес!";
+                return;
+            }
+    
+            // Записва настроението и датата
+            localStorage.setItem('mood_today', mood);
+            localStorage.setItem('mood_date', today);
+    
+            // Добавя новото настроение към историята
+            addMoodToHistory(today, mood);
+    
+            document.getElementById('responseMessage').textContent = "Благодарим! Настроението ти е записано за днес.";
+            
+            // Забраняваме повторен запис
+            document.querySelectorAll('.mood').forEach(moodDiv => {
+                moodDiv.style.pointerEvents = 'none';
+            });
+        }
+    
+        function addMoodToHistory(date, mood) {
+            const historyList = document.getElementById('moodHistory');
+            const listItem = document.createElement('li');
+            listItem.textContent = `${date}: ${mood}`;
+            historyList.prepend(listItem);
+        }
+    
+        function loadMoodHistory() {
+            const today = new Date().toISOString().split('T')[0];
+            const lastMoodDate = localStorage.getItem('mood_date');
+            const moodToday = localStorage.getItem('mood_today');
+    
+            // Проверява дали има гласуване за днес и деактивира бутоните, ако е гласувано
+            if (lastMoodDate === today && moodToday) {
+                document.querySelectorAll('.mood').forEach(moodDiv => {
+                    moodDiv.style.pointerEvents = 'none';
+                });
+                document.getElementById('responseMessage').textContent = "Вече сте избрали настроение за днес!";
+            }
+    
+            // Зарежда историята от localStorage
+            const historyList = document.getElementById('moodHistory');
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('mood_history_')) {
+                    const dateMood = localStorage.getItem(key).split('|');
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${dateMood[0]}: ${dateMood[1]}`;
+                    historyList.appendChild(listItem);
+                }
+            }
+    
+            // Записва настроението за текущия ден в историята
+            if (moodToday) {
+                localStorage.setItem(`mood_history_${today}`, `${today}|${moodToday}`);
+            }
+        }
+    
+        // Зарежда историята при стартиране на страницата
+        loadMoodHistory();
+    </script>
+    
+</div>
+
 
  <div id="fallingElements"></div>
  <script>
